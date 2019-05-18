@@ -44,12 +44,9 @@
       if (isNode(selector)) {
         return [selector].filter(isSupported)
       }
-      if (typeof selector === 'string') {
+      if (typeof selector === 'string' && typeof document !== 'undefined') {
         return [].slice
-          .call(
-            typeof document !== 'undefined' &&
-              document.querySelectorAll(selector)
-          )
+          .call(document.querySelectorAll(selector))
           .filter(isSupported)
       }
       return []
@@ -62,11 +59,13 @@
     }
   }
   var createOverlay = function createOverlay(background) {
-    var overlay =
-      typeof document !== 'undefined' && document.createElement('div')
-    overlay.classList.add('medium-zoom-overlay')
-    overlay.style.background = background
-    return overlay
+    if (typeof document !== 'undefined') {
+      var overlay = document.createElement('div')
+      overlay.classList.add('medium-zoom-overlay')
+      overlay.style.background = background
+      return overlay
+    }
+    return
   }
   var cloneTarget = function cloneTarget(template) {
     var _template$getBounding = template.getBoundingClientRect(),
@@ -110,15 +109,17 @@
     ) {
       return new CustomEvent(type, eventParams)
     }
-    var customEvent =
-      typeof document !== 'undefined' && document.createEvent('CustomEvent')
-    customEvent.initCustomEvent(
-      type,
-      eventParams.bubbles,
-      eventParams.cancelable,
-      eventParams.detail
-    )
-    return customEvent
+    if (typeof document !== 'undefined') {
+      var customEvent = document.createEvent('CustomEvent')
+      customEvent.initCustomEvent(
+        type,
+        eventParams.bubbles,
+        eventParams.cancelable,
+        eventParams.detail
+      )
+      return customEvent
+    }
+    return
   }
   var mediumZoom = function mediumZoom(selector) {
     var options =

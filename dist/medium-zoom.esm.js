@@ -27,12 +27,8 @@
         ? [].slice.call(a).filter(isSupported)
         : isNode(a)
         ? [a].filter(isSupported)
-        : 'string' == typeof a
-        ? [].slice
-            .call(
-              'undefined' != typeof document && document.querySelectorAll(a)
-            )
-            .filter(isSupported)
+        : 'string' == typeof a && 'undefined' != typeof document
+        ? [].slice.call(document.querySelectorAll(a)).filter(isSupported)
         : []
     } catch (a) {
       throw new TypeError(
@@ -41,8 +37,10 @@
     }
   },
   createOverlay = function(a) {
-    var b = 'undefined' != typeof document && document.createElement('div')
-    return b.classList.add('medium-zoom-overlay'), (b.style.background = a), b
+    if ('undefined' != typeof document) {
+      var b = document.createElement('div')
+      return b.classList.add('medium-zoom-overlay'), (b.style.background = a), b
+    }
   },
   cloneTarget = function(a) {
     var b = a.getBoundingClientRect(),
@@ -78,9 +76,10 @@
     var c = _extends({ bubbles: !1, cancelable: !1, detail: void 0 }, b)
     if ('undefined' != typeof window && 'function' == typeof window.CustomEvent)
       return new CustomEvent(a, c)
-    var d =
-      'undefined' != typeof document && document.createEvent('CustomEvent')
-    return d.initCustomEvent(a, c.bubbles, c.cancelable, c.detail), d
+    if ('undefined' != typeof document) {
+      var d = document.createEvent('CustomEvent')
+      return d.initCustomEvent(a, c.bubbles, c.cancelable, c.detail), d
+    }
   },
   mediumZoom = function a(b) {
     var c = 1 < arguments.length && arguments[1] !== void 0 ? arguments[1] : {},

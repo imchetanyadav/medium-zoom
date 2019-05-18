@@ -25,12 +25,10 @@ export const getImagesFromSelector = selector => {
       return [selector].filter(isSupported)
     }
 
-    if (typeof selector === 'string') {
+    if (typeof selector === 'string' && typeof document !== `undefined`) {
       // Do not use spread operator or Array.from() for IE support
       return [].slice
-        .call(
-          typeof document !== `undefined` && document.querySelectorAll(selector)
-        )
+        .call(document.querySelectorAll(selector))
         .filter(isSupported)
     }
 
@@ -45,12 +43,14 @@ export const getImagesFromSelector = selector => {
 }
 
 export const createOverlay = background => {
-  const overlay =
-    typeof document !== `undefined` && document.createElement('div')
-  overlay.classList.add('medium-zoom-overlay')
-  overlay.style.background = background
+  if (typeof document !== `undefined`) {
+    const overlay = document.createElement('div')
+    overlay.classList.add('medium-zoom-overlay')
+    overlay.style.background = background
 
-  return overlay
+    return overlay
+  }
+  return
 }
 
 export const cloneTarget = template => {
@@ -93,14 +93,16 @@ export const createCustomEvent = (type, params) => {
     return new CustomEvent(type, eventParams)
   }
 
-  const customEvent =
-    typeof document !== `undefined` && document.createEvent('CustomEvent')
-  customEvent.initCustomEvent(
-    type,
-    eventParams.bubbles,
-    eventParams.cancelable,
-    eventParams.detail
-  )
+  if (typeof document !== `undefined`) {
+    const customEvent = document.createEvent('CustomEvent')
+    customEvent.initCustomEvent(
+      type,
+      eventParams.bubbles,
+      eventParams.cancelable,
+      eventParams.detail
+    )
 
-  return customEvent
+    return customEvent
+  }
+  return
 }
