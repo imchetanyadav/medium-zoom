@@ -12,7 +12,7 @@ const mediumZoom = (selector, options = {}) => {
    * Ensure the compatibility with IE11 if no Promise polyfill are used.
    */
   const Promise =
-    window.Promise ||
+    (window && window.Promise) ||
     function Promise(fn) {
       function noop() {}
       fn(noop, noop)
@@ -39,7 +39,7 @@ const mediumZoom = (selector, options = {}) => {
     }
 
     const currentScroll =
-      window.pageYOffset ||
+      (window && window.pageYOffset) ||
       document.documentElement.scrollTop ||
       document.body.scrollTop ||
       0
@@ -307,7 +307,7 @@ const mediumZoom = (selector, options = {}) => {
       )
 
       scrollTop =
-        window.pageYOffset ||
+        (window && window.pageYOffset) ||
         document.documentElement.scrollTop ||
         document.body.scrollTop ||
         0
@@ -328,9 +328,10 @@ const mediumZoom = (selector, options = {}) => {
 
       document.body.appendChild(active.zoomed)
 
-      window.requestAnimationFrame(() => {
-        document.body.classList.add('medium-zoom--opened')
-      })
+      window &&
+        window.requestAnimationFrame(() => {
+          document.body.classList.add('medium-zoom--opened')
+        })
 
       active.original.classList.add('medium-zoom-image--hidden')
       active.zoomed.classList.add('medium-zoom-image--opened')
@@ -517,7 +518,7 @@ const mediumZoom = (selector, options = {}) => {
   document.addEventListener('click', _handleClick)
   document.addEventListener('keyup', _handleKeyUp)
   document.addEventListener('scroll', _handleScroll)
-  window.addEventListener('resize', close)
+  window && window.addEventListener('resize', close)
 
   const zoom = {
     open,
