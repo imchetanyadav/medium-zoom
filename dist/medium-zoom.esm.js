@@ -92,8 +92,9 @@
         if (!t && w.original) {
           var a =
             ('undefined' != typeof window && window.pageYOffset) ||
-            document.documentElement.scrollTop ||
-            document.body.scrollTop ||
+            ('undefined' != typeof document &&
+              document.documentElement.scrollTop) ||
+            ('undefined' != typeof document && document.body.scrollTop) ||
             0
           Math.abs(u - a) > v.scrollOffset && setTimeout(n, 150)
         }
@@ -111,7 +112,8 @@
         ) {
           var c = isNode(a.template)
             ? a.template
-            : document.querySelector(a.template)
+            : 'undefined' != typeof document &&
+              document.querySelector(a.template)
           b.template = c
         }
         return (
@@ -211,8 +213,12 @@
           c = function() {
             var a = Math.min,
               b = {
-                width: document.documentElement.clientWidth,
-                height: document.documentElement.clientHeight,
+                width:
+                  'undefined' != typeof document &&
+                  document.documentElement.clientWidth,
+                height:
+                  'undefined' != typeof document &&
+                  document.documentElement.clientHeight,
                 left: 0,
                 top: 0,
                 right: 0,
@@ -228,7 +234,8 @@
               else {
                 var e = isNode(v.container)
                     ? v.container
-                    : document.querySelector(v.container),
+                    : 'undefined' != typeof document &&
+                      document.querySelector(v.container),
                   f = e.getBoundingClientRect(),
                   g = f.width,
                   h = f.height,
@@ -269,26 +276,32 @@
             ),
             (u =
               ('undefined' != typeof window && window.pageYOffset) ||
-              document.documentElement.scrollTop ||
-              document.body.scrollTop ||
+              ('undefined' != typeof document &&
+                document.documentElement.scrollTop) ||
+              ('undefined' != typeof document && document.body.scrollTop) ||
               0),
             (t = !0),
             (w.zoomed = cloneTarget(w.original)),
-            document.body.appendChild(x),
+            'undefined' != typeof document && document.body.appendChild(x),
             v.template)
           ) {
             var e = isNode(v.template)
               ? v.template
-              : document.querySelector(v.template)
-            ;(w.template = document.createElement('div')),
+              : 'undefined' != typeof document &&
+                document.querySelector(v.template)
+            ;(w.template =
+              'undefined' != typeof document && document.createElement('div')),
               w.template.appendChild(e.content.cloneNode(!0)),
-              document.body.appendChild(w.template)
+              'undefined' != typeof document &&
+                document.body.appendChild(w.template)
           }
           if (
-            (document.body.appendChild(w.zoomed),
+            ('undefined' != typeof document &&
+              document.body.appendChild(w.zoomed),
             'undefined' != typeof window &&
               window.requestAnimationFrame(function() {
-                document.body.classList.add('medium-zoom--opened')
+                'undefined' != typeof document &&
+                  document.body.classList.add('medium-zoom--opened')
               }),
             w.original.classList.add('medium-zoom-image--hidden'),
             w.zoomed.classList.add('medium-zoom-image--opened'),
@@ -322,7 +335,8 @@
                 (clearInterval(f),
                 w.zoomedHd.classList.add('medium-zoom-image--opened'),
                 w.zoomedHd.addEventListener('click', n),
-                document.body.appendChild(w.zoomedHd),
+                'undefined' != typeof document &&
+                  document.body.appendChild(w.zoomedHd),
                 c())
             }, 10)
           } else if (w.original.hasAttribute('srcset')) {
@@ -332,7 +346,8 @@
               w.zoomedHd.removeEventListener('load', g),
                 w.zoomedHd.classList.add('medium-zoom-image--opened'),
                 w.zoomedHd.addEventListener('click', n),
-                document.body.appendChild(w.zoomedHd),
+                'undefined' != typeof document &&
+                  document.body.appendChild(w.zoomedHd),
                 c()
             })
           } else c()
@@ -342,7 +357,8 @@
         return new d(function(a) {
           if (t || !w.original) return void a(y)
           ;(t = !0),
-            document.body.classList.remove('medium-zoom--opened'),
+            'undefined' != typeof document &&
+              document.body.classList.remove('medium-zoom--opened'),
             (w.zoomed.style.transform = ''),
             w.zoomedHd && (w.zoomedHd.style.transform = ''),
             w.template &&
@@ -353,11 +369,16 @@
             ),
             w.zoomed.addEventListener('transitionend', function b() {
               w.original.classList.remove('medium-zoom-image--hidden'),
-                document.body.removeChild(w.zoomed),
-                w.zoomedHd && document.body.removeChild(w.zoomedHd),
-                document.body.removeChild(x),
+                'undefined' != typeof document &&
+                  document.body.removeChild(w.zoomed),
+                w.zoomedHd &&
+                  'undefined' != typeof document &&
+                  document.body.removeChild(w.zoomedHd),
+                'undefined' != typeof document && document.body.removeChild(x),
                 w.zoomed.classList.remove('medium-zoom-image--opened'),
-                w.template && document.body.removeChild(w.template),
+                w.template &&
+                  'undefined' != typeof document &&
+                  document.body.removeChild(w.template),
                 (t = !1),
                 w.zoomed.removeEventListener('transitionend', b),
                 w.original.dispatchEvent(
@@ -405,11 +426,12 @@
         v
       ))
     var x = createOverlay(v.background)
-    document.addEventListener('click', e),
-      document.addEventListener('keyup', function(a) {
-        27 === (a.keyCode || a.which) && n()
-      }),
-      document.addEventListener('scroll', f),
+    'undefined' != typeof document && document.addEventListener('click', e),
+      'undefined' != typeof document &&
+        document.addEventListener('keyup', function(a) {
+          27 === (a.keyCode || a.which) && n()
+        }),
+      'undefined' != typeof document && document.addEventListener('scroll', f),
       'undefined' != typeof window && window.addEventListener('resize', n)
     var y = {
       open: m,

@@ -40,8 +40,8 @@ const mediumZoom = (selector, options = {}) => {
 
     const currentScroll =
       (typeof window !== `undefined` && window.pageYOffset) ||
-      document.documentElement.scrollTop ||
-      document.body.scrollTop ||
+      (typeof document !== `undefined` && document.documentElement.scrollTop) ||
+      (typeof document !== `undefined` && document.body.scrollTop) ||
       0
 
     if (Math.abs(scrollTop - currentScroll) > zoomOptions.scrollOffset) {
@@ -73,7 +73,8 @@ const mediumZoom = (selector, options = {}) => {
     if (options.template) {
       const template = isNode(options.template)
         ? options.template
-        : document.querySelector(options.template)
+        : typeof document !== `undefined` &&
+          document.querySelector(options.template)
 
       newOptions.template = template
     }
@@ -177,8 +178,12 @@ const mediumZoom = (selector, options = {}) => {
   const open = ({ target } = {}) => {
     const _animate = () => {
       let container = {
-        width: document.documentElement.clientWidth,
-        height: document.documentElement.clientHeight,
+        width:
+          typeof document !== `undefined` &&
+          document.documentElement.clientWidth,
+        height:
+          typeof document !== `undefined` &&
+          document.documentElement.clientHeight,
         left: 0,
         top: 0,
         right: 0,
@@ -210,7 +215,8 @@ const mediumZoom = (selector, options = {}) => {
           // The container is given as an element
           const zoomContainer = isNode(zoomOptions.container)
             ? zoomOptions.container
-            : document.querySelector(zoomOptions.container)
+            : typeof document !== `undefined` &&
+              document.querySelector(zoomOptions.container)
 
           const {
             width,
@@ -308,29 +314,35 @@ const mediumZoom = (selector, options = {}) => {
 
       scrollTop =
         (typeof window !== `undefined` && window.pageYOffset) ||
-        document.documentElement.scrollTop ||
-        document.body.scrollTop ||
+        (typeof document !== `undefined` &&
+          document.documentElement.scrollTop) ||
+        (typeof document !== `undefined` && document.body.scrollTop) ||
         0
       isAnimating = true
       active.zoomed = cloneTarget(active.original)
 
-      document.body.appendChild(overlay)
+      typeof document !== `undefined` && document.body.appendChild(overlay)
 
       if (zoomOptions.template) {
         const template = isNode(zoomOptions.template)
           ? zoomOptions.template
-          : document.querySelector(zoomOptions.template)
-        active.template = document.createElement('div')
+          : typeof document !== `undefined` &&
+            document.querySelector(zoomOptions.template)
+        active.template =
+          typeof document !== `undefined` && document.createElement('div')
         active.template.appendChild(template.content.cloneNode(true))
 
-        document.body.appendChild(active.template)
+        typeof document !== `undefined` &&
+          document.body.appendChild(active.template)
       }
 
-      document.body.appendChild(active.zoomed)
+      typeof document !== `undefined` &&
+        document.body.appendChild(active.zoomed)
 
       typeof window !== `undefined` &&
         window.requestAnimationFrame(() => {
-          document.body.classList.add('medium-zoom--opened')
+          typeof document !== `undefined` &&
+            document.body.classList.add('medium-zoom--opened')
         })
 
       active.original.classList.add('medium-zoom-image--hidden')
@@ -364,7 +376,8 @@ const mediumZoom = (selector, options = {}) => {
             clearInterval(getZoomTargetSize)
             active.zoomedHd.classList.add('medium-zoom-image--opened')
             active.zoomedHd.addEventListener('click', close)
-            document.body.appendChild(active.zoomedHd)
+            typeof document !== `undefined` &&
+              document.body.appendChild(active.zoomedHd)
             _animate()
           }
         }, 10)
@@ -386,7 +399,8 @@ const mediumZoom = (selector, options = {}) => {
             active.zoomedHd.removeEventListener('load', loadEventListener)
             active.zoomedHd.classList.add('medium-zoom-image--opened')
             active.zoomedHd.addEventListener('click', close)
-            document.body.appendChild(active.zoomedHd)
+            typeof document !== `undefined` &&
+              document.body.appendChild(active.zoomedHd)
             _animate()
           }
         )
@@ -411,14 +425,17 @@ const mediumZoom = (selector, options = {}) => {
 
       const _handleCloseEnd = () => {
         active.original.classList.remove('medium-zoom-image--hidden')
-        document.body.removeChild(active.zoomed)
+        typeof document !== `undefined` &&
+          document.body.removeChild(active.zoomed)
         if (active.zoomedHd) {
-          document.body.removeChild(active.zoomedHd)
+          typeof document !== `undefined` &&
+            document.body.removeChild(active.zoomedHd)
         }
-        document.body.removeChild(overlay)
+        typeof document !== `undefined` && document.body.removeChild(overlay)
         active.zoomed.classList.remove('medium-zoom-image--opened')
         if (active.template) {
-          document.body.removeChild(active.template)
+          typeof document !== `undefined` &&
+            document.body.removeChild(active.template)
         }
 
         isAnimating = false
@@ -439,7 +456,8 @@ const mediumZoom = (selector, options = {}) => {
       }
 
       isAnimating = true
-      document.body.classList.remove('medium-zoom--opened')
+      typeof document !== `undefined` &&
+        document.body.classList.remove('medium-zoom--opened')
       active.zoomed.style.transform = ''
 
       if (active.zoomedHd) {
@@ -515,9 +533,12 @@ const mediumZoom = (selector, options = {}) => {
 
   const overlay = createOverlay(zoomOptions.background)
 
-  document.addEventListener('click', _handleClick)
-  document.addEventListener('keyup', _handleKeyUp)
-  document.addEventListener('scroll', _handleScroll)
+  typeof document !== `undefined` &&
+    document.addEventListener('click', _handleClick)
+  typeof document !== `undefined` &&
+    document.addEventListener('keyup', _handleKeyUp)
+  typeof document !== `undefined` &&
+    document.addEventListener('scroll', _handleScroll)
   typeof window !== `undefined` && window.addEventListener('resize', close)
 
   const zoom = {
