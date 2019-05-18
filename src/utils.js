@@ -28,7 +28,9 @@ export const getImagesFromSelector = selector => {
     if (typeof selector === 'string') {
       // Do not use spread operator or Array.from() for IE support
       return [].slice
-        .call(document.querySelectorAll(selector))
+        .call(
+          typeof document !== `undefined` && document.querySelectorAll(selector)
+        )
         .filter(isSupported)
     }
 
@@ -43,7 +45,8 @@ export const getImagesFromSelector = selector => {
 }
 
 export const createOverlay = background => {
-  const overlay = document.createElement('div')
+  const overlay =
+    typeof document !== `undefined` && document.createElement('div')
   overlay.classList.add('medium-zoom-overlay')
   overlay.style.background = background
 
@@ -54,14 +57,14 @@ export const cloneTarget = template => {
   const { top, left, width, height } = template.getBoundingClientRect()
   const clone = template.cloneNode()
   const scrollTop =
-    window.pageYOffset ||
-    document.documentElement.scrollTop ||
-    document.body.scrollTop ||
+    (typeof window !== `undefined` && window.pageYOffset) ||
+    (typeof document !== `undefined` && document.documentElement.scrollTop) ||
+    (typeof document !== `undefined` && document.body.scrollTop) ||
     0
   const scrollLeft =
-    window.pageXOffset ||
-    document.documentElement.scrollLeft ||
-    document.body.scrollLeft ||
+    (typeof window !== `undefined` && window.pageXOffset) ||
+    (typeof document !== `undefined` && document.documentElement.scrollLeft) ||
+    (typeof document !== `undefined` && document.body.scrollLeft) ||
     0
 
   clone.removeAttribute('id')
@@ -83,11 +86,15 @@ export const createCustomEvent = (type, params) => {
     ...params,
   }
 
-  if (typeof window.CustomEvent === 'function') {
+  if (
+    typeof window !== `undefined` &&
+    typeof window.CustomEvent === 'function'
+  ) {
     return new CustomEvent(type, eventParams)
   }
 
-  const customEvent = document.createEvent('CustomEvent')
+  const customEvent =
+    typeof document !== `undefined` && document.createEvent('CustomEvent')
   customEvent.initCustomEvent(
     type,
     eventParams.bubbles,

@@ -46,7 +46,10 @@
       }
       if (typeof selector === 'string') {
         return [].slice
-          .call(document.querySelectorAll(selector))
+          .call(
+            typeof document !== 'undefined' &&
+              document.querySelectorAll(selector)
+          )
           .filter(isSupported)
       }
       return []
@@ -59,7 +62,8 @@
     }
   }
   var createOverlay = function createOverlay(background) {
-    var overlay = document.createElement('div')
+    var overlay =
+      typeof document !== 'undefined' && document.createElement('div')
     overlay.classList.add('medium-zoom-overlay')
     overlay.style.background = background
     return overlay
@@ -72,14 +76,15 @@
       height = _template$getBounding.height
     var clone = template.cloneNode()
     var scrollTop =
-      window.pageYOffset ||
-      document.documentElement.scrollTop ||
-      document.body.scrollTop ||
+      (typeof window !== 'undefined' && window.pageYOffset) ||
+      (typeof document !== 'undefined' && document.documentElement.scrollTop) ||
+      (typeof document !== 'undefined' && document.body.scrollTop) ||
       0
     var scrollLeft =
-      window.pageXOffset ||
-      document.documentElement.scrollLeft ||
-      document.body.scrollLeft ||
+      (typeof window !== 'undefined' && window.pageXOffset) ||
+      (typeof document !== 'undefined' &&
+        document.documentElement.scrollLeft) ||
+      (typeof document !== 'undefined' && document.body.scrollLeft) ||
       0
     clone.removeAttribute('id')
     clone.style.position = 'absolute'
@@ -99,10 +104,14 @@
       },
       params
     )
-    if (typeof window.CustomEvent === 'function') {
+    if (
+      typeof window !== 'undefined' &&
+      typeof window.CustomEvent === 'function'
+    ) {
       return new CustomEvent(type, eventParams)
     }
-    var customEvent = document.createEvent('CustomEvent')
+    var customEvent =
+      typeof document !== 'undefined' && document.createEvent('CustomEvent')
     customEvent.initCustomEvent(
       type,
       eventParams.bubbles,

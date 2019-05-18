@@ -28,7 +28,11 @@
         : isNode(a)
         ? [a].filter(isSupported)
         : 'string' == typeof a
-        ? [].slice.call(document.querySelectorAll(a)).filter(isSupported)
+        ? [].slice
+            .call(
+              'undefined' != typeof document && document.querySelectorAll(a)
+            )
+            .filter(isSupported)
         : []
     } catch (a) {
       throw new TypeError(
@@ -37,7 +41,7 @@
     }
   },
   createOverlay = function(a) {
-    var b = document.createElement('div')
+    var b = 'undefined' != typeof document && document.createElement('div')
     return b.classList.add('medium-zoom-overlay'), (b.style.background = a), b
   },
   cloneTarget = function(a) {
@@ -48,14 +52,16 @@
       f = b.height,
       g = a.cloneNode(),
       h =
-        window.pageYOffset ||
-        document.documentElement.scrollTop ||
-        document.body.scrollTop ||
+        ('undefined' != typeof window && window.pageYOffset) ||
+        ('undefined' != typeof document &&
+          document.documentElement.scrollTop) ||
+        ('undefined' != typeof document && document.body.scrollTop) ||
         0,
       i =
-        window.pageXOffset ||
-        document.documentElement.scrollLeft ||
-        document.body.scrollLeft ||
+        ('undefined' != typeof window && window.pageXOffset) ||
+        ('undefined' != typeof document &&
+          document.documentElement.scrollLeft) ||
+        ('undefined' != typeof document && document.body.scrollLeft) ||
         0
     return (
       g.removeAttribute('id'),
@@ -70,8 +76,10 @@
   },
   createCustomEvent = function(a, b) {
     var c = _extends({ bubbles: !1, cancelable: !1, detail: void 0 }, b)
-    if ('function' == typeof window.CustomEvent) return new CustomEvent(a, c)
-    var d = document.createEvent('CustomEvent')
+    if ('undefined' != typeof window && 'function' == typeof window.CustomEvent)
+      return new CustomEvent(a, c)
+    var d =
+      'undefined' != typeof document && document.createEvent('CustomEvent')
     return d.initCustomEvent(a, c.bubbles, c.cancelable, c.detail), d
   },
   mediumZoom = function a(b) {
