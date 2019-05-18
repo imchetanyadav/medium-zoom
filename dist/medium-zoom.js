@@ -115,7 +115,7 @@
     var options =
       arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {}
     var Promise =
-      (window && window.Promise) ||
+      (typeof window !== 'undefined' && window.Promise) ||
       function Promise(fn) {
         function noop() {}
         fn(noop, noop)
@@ -138,7 +138,7 @@
         return
       }
       var currentScroll =
-        (window && window.pageYOffset) ||
+        (typeof window !== 'undefined' && window.pageYOffset) ||
         document.documentElement.scrollTop ||
         document.body.scrollTop ||
         0
@@ -415,7 +415,7 @@
           })
         )
         scrollTop =
-          (window && window.pageYOffset) ||
+          (typeof window !== 'undefined' && window.pageYOffset) ||
           document.documentElement.scrollTop ||
           document.body.scrollTop ||
           0
@@ -431,7 +431,7 @@
           document.body.appendChild(active.template)
         }
         document.body.appendChild(active.zoomed)
-        window &&
+        typeof window !== 'undefined' &&
           window.requestAnimationFrame(function() {
             document.body.classList.add('medium-zoom--opened')
           })
@@ -583,7 +583,7 @@
     document.addEventListener('click', _handleClick)
     document.addEventListener('keyup', _handleKeyUp)
     document.addEventListener('scroll', _handleScroll)
-    window && window.addEventListener('resize', close)
+    typeof window !== 'undefined' && window.addEventListener('resize', close)
     var zoom = {
       open: open,
       close: close,

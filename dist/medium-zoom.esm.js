@@ -77,7 +77,7 @@
   mediumZoom = function a(b) {
     var c = 1 < arguments.length && arguments[1] !== void 0 ? arguments[1] : {},
       d =
-        (window && window.Promise) ||
+        ('undefined' != typeof window && window.Promise) ||
         function(a) {
           function b() {}
           a(b, b)
@@ -91,7 +91,7 @@
       f = function() {
         if (!t && w.original) {
           var a =
-            (window && window.pageYOffset) ||
+            ('undefined' != typeof window && window.pageYOffset) ||
             document.documentElement.scrollTop ||
             document.body.scrollTop ||
             0
@@ -268,7 +268,7 @@
               createCustomEvent('medium-zoom:open', { detail: { zoom: y } })
             ),
             (u =
-              (window && window.pageYOffset) ||
+              ('undefined' != typeof window && window.pageYOffset) ||
               document.documentElement.scrollTop ||
               document.body.scrollTop ||
               0),
@@ -286,7 +286,7 @@
           }
           if (
             (document.body.appendChild(w.zoomed),
-            window &&
+            'undefined' != typeof window &&
               window.requestAnimationFrame(function() {
                 document.body.classList.add('medium-zoom--opened')
               }),
@@ -410,7 +410,7 @@
         27 === (a.keyCode || a.which) && n()
       }),
       document.addEventListener('scroll', f),
-      window && window.addEventListener('resize', n)
+      'undefined' != typeof window && window.addEventListener('resize', n)
     var y = {
       open: m,
       close: n,
